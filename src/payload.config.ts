@@ -38,7 +38,9 @@ export default buildConfig({
   collections: [Users, Media, Guests, BrideGuests, GroomGuests],
   globals: [WeddingDetails, BrideWeddingDetails, GroomWeddingDetails],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret:
+    process.env.PAYLOAD_SECRET ||
+    'd1c3e2c5b63bd0d33f927c2caad7b5c16347a86ad2270a681f25fe5212d4c56b',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
