@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #D4C5B9;
+  --color-secondary: #8B7355;
+  --color-accent: #FAF8F5;
+  --color-text: #c37c49;
+  --color-cream: #f4ded3;
+  --font-serif: var(--font-qalisha), serif;
+  --font-sans: var(--font-centur), sans-serif;
+  --font-handwriting: var(--font-dancing-script), cursive;
+  --font-heading: var(--font-playfair-display), serif;
+}
+
+@layer base {
+  body {
+    @apply bg-cream text-text;
+  }
+}

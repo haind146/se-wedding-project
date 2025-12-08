@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    guests: Guest;
+    'bride-guests': BrideGuest;
+    'groom-guests': GroomGuest;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,16 +81,28 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    guests: GuestsSelect<false> | GuestsSelect<true>;
+    'bride-guests': BrideGuestsSelect<false> | BrideGuestsSelect<true>;
+    'groom-guests': GroomGuestsSelect<false> | GroomGuestsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
-  globals: {};
-  globalsSelect: {};
+  fallbackLocale: null;
+  globals: {
+    'wedding-details': WeddingDetail;
+    'bride-wedding-details': BrideWeddingDetail;
+    'groom-wedding-details': GroomWeddingDetail;
+  };
+  globalsSelect: {
+    'wedding-details': WeddingDetailsSelect<false> | WeddingDetailsSelect<true>;
+    'bride-wedding-details': BrideWeddingDetailsSelect<false> | BrideWeddingDetailsSelect<true>;
+    'groom-wedding-details': GroomWeddingDetailsSelect<false> | GroomWeddingDetailsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -120,7 +135,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -144,7 +159,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -160,10 +175,55 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guests".
+ */
+export interface Guest {
+  id: number;
+  name: string;
+  code: string;
+  isGeneralInvite?: boolean | null;
+  status?: ('pending' | 'confirmed' | 'declined') | null;
+  wishes?: string | null;
+  numberOfGuests?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bride-guests".
+ */
+export interface BrideGuest {
+  id: number;
+  name: string;
+  code: string;
+  isGeneralInvite?: boolean | null;
+  status?: ('pending' | 'confirmed' | 'declined') | null;
+  wishes?: string | null;
+  numberOfGuests?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groom-guests".
+ */
+export interface GroomGuest {
+  id: number;
+  name: string;
+  code: string;
+  isGeneralInvite?: boolean | null;
+  status?: ('pending' | 'confirmed' | 'declined') | null;
+  wishes?: string | null;
+  numberOfGuests?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -180,20 +240,32 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'guests';
+        value: number | Guest;
+      } | null)
+    | ({
+        relationTo: 'bride-guests';
+        value: number | BrideGuest;
+      } | null)
+    | ({
+        relationTo: 'groom-guests';
+        value: number | GroomGuest;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -203,10 +275,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -226,7 +298,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -274,6 +346,48 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guests_select".
+ */
+export interface GuestsSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  isGeneralInvite?: T;
+  status?: T;
+  wishes?: T;
+  numberOfGuests?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bride-guests_select".
+ */
+export interface BrideGuestsSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  isGeneralInvite?: T;
+  status?: T;
+  wishes?: T;
+  numberOfGuests?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groom-guests_select".
+ */
+export interface GroomGuestsSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  isGeneralInvite?: T;
+  status?: T;
+  wishes?: T;
+  numberOfGuests?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -311,6 +425,450 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-details".
+ */
+export interface WeddingDetail {
+  id: number;
+  bride: {
+    name: string;
+    bio?: string | null;
+    photo?: (number | null) | Media;
+  };
+  groom: {
+    name: string;
+    bio?: string | null;
+    photo?: (number | null) | Media;
+  };
+  timeline?:
+    | {
+        time: string;
+        title: string;
+        description?: string | null;
+        location?: string | null;
+        mapUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  quote?: string | null;
+  quoteAuthor?: string | null;
+  quoteBackgroundImage?: (number | null) | Media;
+  coupleBackgroundImage?: (number | null) | Media;
+  ceremony: {
+    time: string;
+    date: string;
+    dayOfWeek?: string | null;
+    lunarDate?: string | null;
+    venueName: string;
+    venueAddress: string;
+    mapUrl?: string | null;
+  };
+  giftConfig?: {
+    brideQRCode?: (number | null) | Media;
+    groomQRCode?: (number | null) | Media;
+  };
+  venue: {
+    name: string;
+    address: string;
+    mapUrl?: string | null;
+  };
+  /**
+   * Add custom sections with parallax background images
+   */
+  customSections?:
+    | {
+        enabled?: boolean | null;
+        title?: string | null;
+        content?: string | null;
+        backgroundImage?: (number | null) | Media;
+        /**
+         * Speed of parallax effect (0.1 - 1.0, lower = slower)
+         */
+        parallaxSpeed?: number | null;
+        /**
+         * CSS value (e.g., 70vh, 500px)
+         */
+        minHeight?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Select images to display in the "Our Moments" gallery section. If empty, no images will be shown.
+   */
+  galleryImages?: (number | Media)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bride-wedding-details".
+ */
+export interface BrideWeddingDetail {
+  id: number;
+  bride: {
+    name: string;
+    bio?: string | null;
+    photo?: (number | null) | Media;
+  };
+  groom: {
+    name: string;
+    bio?: string | null;
+    photo?: (number | null) | Media;
+  };
+  timeline?:
+    | {
+        time: string;
+        title: string;
+        description?: string | null;
+        location?: string | null;
+        mapUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  quote?: string | null;
+  quoteAuthor?: string | null;
+  quoteBackgroundImage?: (number | null) | Media;
+  coupleBackgroundImage?: (number | null) | Media;
+  ceremony: {
+    time: string;
+    date: string;
+    dayOfWeek?: string | null;
+    lunarDate?: string | null;
+    venueName: string;
+    venueAddress: string;
+    mapUrl?: string | null;
+  };
+  giftConfig?: {
+    brideQRCode?: (number | null) | Media;
+    groomQRCode?: (number | null) | Media;
+  };
+  venue: {
+    name: string;
+    address: string;
+    mapUrl?: string | null;
+  };
+  /**
+   * Add custom sections with parallax background images
+   */
+  customSections?:
+    | {
+        enabled?: boolean | null;
+        title?: string | null;
+        content?: string | null;
+        backgroundImage?: (number | null) | Media;
+        /**
+         * Speed of parallax effect (0.1 - 1.0, lower = slower)
+         */
+        parallaxSpeed?: number | null;
+        /**
+         * CSS value (e.g., 70vh, 500px)
+         */
+        minHeight?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Select images to display in the "Our Moments" gallery section. If empty, no images will be shown.
+   */
+  galleryImages?: (number | Media)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groom-wedding-details".
+ */
+export interface GroomWeddingDetail {
+  id: number;
+  bride: {
+    name: string;
+    bio?: string | null;
+    photo?: (number | null) | Media;
+  };
+  groom: {
+    name: string;
+    bio?: string | null;
+    photo?: (number | null) | Media;
+  };
+  timeline?:
+    | {
+        time: string;
+        title: string;
+        description?: string | null;
+        location?: string | null;
+        mapUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  quote?: string | null;
+  quoteAuthor?: string | null;
+  quoteBackgroundImage?: (number | null) | Media;
+  coupleBackgroundImage?: (number | null) | Media;
+  ceremony: {
+    time: string;
+    date: string;
+    dayOfWeek?: string | null;
+    lunarDate?: string | null;
+    venueName: string;
+    venueAddress: string;
+    mapUrl?: string | null;
+  };
+  giftConfig?: {
+    brideQRCode?: (number | null) | Media;
+    groomQRCode?: (number | null) | Media;
+  };
+  venue: {
+    name: string;
+    address: string;
+    mapUrl?: string | null;
+  };
+  /**
+   * Add custom sections with parallax background images
+   */
+  customSections?:
+    | {
+        enabled?: boolean | null;
+        title?: string | null;
+        content?: string | null;
+        backgroundImage?: (number | null) | Media;
+        /**
+         * Speed of parallax effect (0.1 - 1.0, lower = slower)
+         */
+        parallaxSpeed?: number | null;
+        /**
+         * CSS value (e.g., 70vh, 500px)
+         */
+        minHeight?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Select images to display in the "Our Moments" gallery section. If empty, no images will be shown.
+   */
+  galleryImages?: (number | Media)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-details_select".
+ */
+export interface WeddingDetailsSelect<T extends boolean = true> {
+  bride?:
+    | T
+    | {
+        name?: T;
+        bio?: T;
+        photo?: T;
+      };
+  groom?:
+    | T
+    | {
+        name?: T;
+        bio?: T;
+        photo?: T;
+      };
+  timeline?:
+    | T
+    | {
+        time?: T;
+        title?: T;
+        description?: T;
+        location?: T;
+        mapUrl?: T;
+        id?: T;
+      };
+  quote?: T;
+  quoteAuthor?: T;
+  quoteBackgroundImage?: T;
+  coupleBackgroundImage?: T;
+  ceremony?:
+    | T
+    | {
+        time?: T;
+        date?: T;
+        dayOfWeek?: T;
+        lunarDate?: T;
+        venueName?: T;
+        venueAddress?: T;
+        mapUrl?: T;
+      };
+  giftConfig?:
+    | T
+    | {
+        brideQRCode?: T;
+        groomQRCode?: T;
+      };
+  venue?:
+    | T
+    | {
+        name?: T;
+        address?: T;
+        mapUrl?: T;
+      };
+  customSections?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        content?: T;
+        backgroundImage?: T;
+        parallaxSpeed?: T;
+        minHeight?: T;
+        id?: T;
+      };
+  galleryImages?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bride-wedding-details_select".
+ */
+export interface BrideWeddingDetailsSelect<T extends boolean = true> {
+  bride?:
+    | T
+    | {
+        name?: T;
+        bio?: T;
+        photo?: T;
+      };
+  groom?:
+    | T
+    | {
+        name?: T;
+        bio?: T;
+        photo?: T;
+      };
+  timeline?:
+    | T
+    | {
+        time?: T;
+        title?: T;
+        description?: T;
+        location?: T;
+        mapUrl?: T;
+        id?: T;
+      };
+  quote?: T;
+  quoteAuthor?: T;
+  quoteBackgroundImage?: T;
+  coupleBackgroundImage?: T;
+  ceremony?:
+    | T
+    | {
+        time?: T;
+        date?: T;
+        dayOfWeek?: T;
+        lunarDate?: T;
+        venueName?: T;
+        venueAddress?: T;
+        mapUrl?: T;
+      };
+  giftConfig?:
+    | T
+    | {
+        brideQRCode?: T;
+        groomQRCode?: T;
+      };
+  venue?:
+    | T
+    | {
+        name?: T;
+        address?: T;
+        mapUrl?: T;
+      };
+  customSections?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        content?: T;
+        backgroundImage?: T;
+        parallaxSpeed?: T;
+        minHeight?: T;
+        id?: T;
+      };
+  galleryImages?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groom-wedding-details_select".
+ */
+export interface GroomWeddingDetailsSelect<T extends boolean = true> {
+  bride?:
+    | T
+    | {
+        name?: T;
+        bio?: T;
+        photo?: T;
+      };
+  groom?:
+    | T
+    | {
+        name?: T;
+        bio?: T;
+        photo?: T;
+      };
+  timeline?:
+    | T
+    | {
+        time?: T;
+        title?: T;
+        description?: T;
+        location?: T;
+        mapUrl?: T;
+        id?: T;
+      };
+  quote?: T;
+  quoteAuthor?: T;
+  quoteBackgroundImage?: T;
+  coupleBackgroundImage?: T;
+  ceremony?:
+    | T
+    | {
+        time?: T;
+        date?: T;
+        dayOfWeek?: T;
+        lunarDate?: T;
+        venueName?: T;
+        venueAddress?: T;
+        mapUrl?: T;
+      };
+  giftConfig?:
+    | T
+    | {
+        brideQRCode?: T;
+        groomQRCode?: T;
+      };
+  venue?:
+    | T
+    | {
+        name?: T;
+        address?: T;
+        mapUrl?: T;
+      };
+  customSections?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        content?: T;
+        backgroundImage?: T;
+        parallaxSpeed?: T;
+        minHeight?: T;
+        id?: T;
+      };
+  galleryImages?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

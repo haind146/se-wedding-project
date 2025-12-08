@@ -5,5 +5,5 @@ export default async function Page({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  return <WeddingPage searchParams={searchParams} side="default" />
+  return <WeddingPage searchParams={searchParams} side="bride" />
 }
