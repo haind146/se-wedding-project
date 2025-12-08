@@ -3,11 +3,17 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your Next.js config here
-  webpack: (webpackConfig) => {
+  webpack: (webpackConfig, { dev }) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
+    }
+
+    if (dev) {
+      webpackConfig.watchOptions = {
+        ignored: ['**/node_modules/**', '**/.wrangler/**', '**/.open-next/**'],
+      }
     }
 
     return webpackConfig
@@ -19,9 +25,10 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: process.env.NODE_ENV === 'development'
-              ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; base-uri 'self';"
-              : "script-src 'self'; object-src 'none'; base-uri 'self';",
+            value:
+              process.env.NODE_ENV === 'development'
+                ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; base-uri 'self';"
+                : "script-src 'self'; object-src 'none'; base-uri 'self';",
           },
         ],
       },

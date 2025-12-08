@@ -106,7 +106,7 @@ export async function WeddingPage({ searchParams, side = 'default' }: WeddingPag
 
       {weddingDetails.timeline && (
         <Timeline
-          events={weddingDetails.timeline.map((e) => ({
+          events={weddingDetails.timeline.map((e: any) => ({
             ...e,
             id: e.id || null,
             description: e.description || null,

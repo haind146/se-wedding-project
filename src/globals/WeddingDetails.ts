@@ -130,10 +130,10 @@ export const WeddingDetails: GlobalConfig = {
           defaultValue: 0.5,
           admin: {
             description: 'Speed of parallax effect (0.1 - 1.0, lower = slower)',
+            step: 0.1,
           },
           min: 0.1,
           max: 1.0,
-          step: 0.1,
         },
         {
           name: 'minHeight',
