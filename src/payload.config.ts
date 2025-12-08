@@ -38,9 +38,7 @@ export default buildConfig({
   collections: [Users, Media, Guests, BrideGuests, GroomGuests],
   globals: [WeddingDetails, BrideWeddingDetails, GroomWeddingDetails],
   editor: lexicalEditor(),
-  secret:
-    process.env.PAYLOAD_SECRET ||
-    'd1c3e2c5b63bd0d33f927c2caad7b5c16347a86ad2270a681f25fe5212d4c56b',
+  secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -58,12 +56,11 @@ export default buildConfig({
 
 // Adapted from https://github.com/opennextjs/opennextjs-cloudflare/blob/d00b3a13e42e65aad76fba41774815726422cc39/packages/cloudflare/src/api/cloudflare-context.ts#L328C36-L328C46
 function getCloudflareContextFromWrangler(): Promise<CloudflareContext> {
-  return import(/* webpackIgnore: true */ `${'__wrangler'.replaceAll('_', '')}`).then((mod) => {
-    const getPlatformProxy = mod.getPlatformProxy || mod.default?.getPlatformProxy
-    return getPlatformProxy({
-      environment: process.env.CLOUDFLARE_ENV,
-      remoteBindings: isProduction,
-      persist: true,
-    } satisfies GetPlatformProxyOptions)
-  })
+  return import(/* webpackIgnore: true */ `${'__wrangler'.replaceAll('_', '')}`).then(
+    ({ getPlatformProxy }) =>
+      getPlatformProxy({
+        environment: process.env.CLOUDFLARE_ENV,
+        remoteBindings: isProduction,
+      } satisfies GetPlatformProxyOptions),
+  )
 }
