@@ -31,7 +31,7 @@ export const Hero = ({ guest, bride, groom, side = 'default' }: HeroProps) => {
           className="text-lg md:text-xl text-secondary mb-12 font-light tracking-widest uppercase"
           style={{ fontFamily: 'var(--font-heading)' }}
         >
-          {showBrideFirst ? 'THÂN MỜI TỚI DỰ LỄ VU QUY' : 'THÂN MỜI TỚI DỰ LỄ THÀNH HÔN'}
+          {'SAVE THE DATE'}
         </h3>
 
         <div className="mb-12">
