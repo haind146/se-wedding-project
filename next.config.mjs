@@ -3,6 +3,9 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your Next.js config here
+  images: {
+    unoptimized: true,
+  },
   webpack: (webpackConfig, { dev }) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
@@ -28,7 +31,7 @@ const nextConfig = {
             value:
               process.env.NODE_ENV === 'development'
                 ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; base-uri 'self';"
-                : "script-src 'self'; object-src 'none'; base-uri 'self';",
+                : "script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self';",
           },
         ],
       },

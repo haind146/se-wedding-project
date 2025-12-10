@@ -12,5 +12,8 @@ export const Media: CollectionConfig = {
       required: true,
     },
   ],
-  upload: true,
+  upload: {
+    imageSizes: [],
+    adminThumbnail: ({ doc }) => doc.url as string,
+  },
 }

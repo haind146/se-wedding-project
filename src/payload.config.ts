@@ -5,7 +5,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
-import sharp from 'sharp'
+// import sharp from 'sharp'
 import { r2Storage } from '@payloadcms/storage-r2'
 
 import { Users } from './collections/Users'
@@ -46,7 +46,7 @@ export default buildConfig({
   db: sqliteD1Adapter({
     binding: cloudflare.env.D1,
   }),
-  sharp,
+  // sharp,
   plugins: [
     r2Storage({
       bucket: cloudflare.env.R2,
